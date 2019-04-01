@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="horizontal"
+    android:id="@+id/note_item">
+   
+   <Button
+       android:layout_width="45dp"
+       android:layout_height="45dp"
+       android:background="@drawable/btn_favourite_off"
+       android:id="@+id/favorite_btn_note"/>
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:layout_marginLeft="16dp">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textStyle="bold"
+             android:text="Note Name"
+             android:id="@+id/name_note"/>
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Date of creating"
+             android:id="@+id/date_note"/>
+      </LinearLayout>
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:gravity="center_horizontal">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Some text of note"
+             android:id="@+id/text_note"
+             android:layout_gravity="top|left"/>
+      </LinearLayout>
+</LinearLayout>
