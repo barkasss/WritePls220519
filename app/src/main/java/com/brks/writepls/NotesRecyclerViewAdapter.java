@@ -123,6 +123,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         private TextView tv_Date;
         private Button button;
         private TextView tv_Text;
+        //
 
 
 
