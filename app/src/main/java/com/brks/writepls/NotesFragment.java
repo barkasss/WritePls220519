@@ -1,7 +1,5 @@
 package com.brks.writepls;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +25,7 @@ public class NotesFragment extends Fragment {
     private List<Note> lstNote = new ArrayList<>();
     private static int position = 0; // индекс заметок в lstNote
     int namePosition = 1;            // номер новой заметки при ее создании
-    RecyclerViewAdapter recyclerAdapter;
+    NotesRecyclerViewAdapter recyclerAdapter;
 
 
 
@@ -42,7 +40,7 @@ public class NotesFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_notes, container, false);
 
-        recyclerAdapter = new RecyclerViewAdapter(getContext(),lstNote);
+        recyclerAdapter = new NotesRecyclerViewAdapter(getContext(),lstNote);
         notesRecyclerView = v.findViewById(R.id.notes_recyclerView);
         notesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         notesRecyclerView.setAdapter(recyclerAdapter);
@@ -56,12 +54,6 @@ public class NotesFragment extends Fragment {
 
 
         addBtn = v.findViewById(R.id.addBtn);
-
-
-
-
-
-
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +75,7 @@ public class NotesFragment extends Fragment {
         return v;
     }
 
-   // public static void decreasePosition() {
-    //    position--;
-   // }
+    public static void decreasePosition() {
+        position--;
+    }
 }

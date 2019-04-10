@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/linearLayout">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/notes_recyclerView">
-
-    </android.support.v7.widget.RecyclerView>
-
-
     <Button
         android:id="@+id/addBtn"
         android:layout_width="75dp"
@@ -22,10 +14,12 @@
         android:layout_margin="16dp"
         android:background="@drawable/btn_add" />
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/notes_recyclerView">
 
-
-
-
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>
 
