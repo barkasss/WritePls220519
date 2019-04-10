@@ -35,6 +35,7 @@ public class RemindersFragment extends Fragment {
     private static int position = 0; // индекс заметок в lstReminder
     int namePosition = 1;            // номер новой заметки при ее создании
     ReminderRecyclerViewAdapter recyclerAdapter;
+    //
 
 
     @Nullable
