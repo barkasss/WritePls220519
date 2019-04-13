@@ -38,6 +38,7 @@ public class RemindersFragment extends Fragment {
     //
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,35 +55,10 @@ public class RemindersFragment extends Fragment {
         timePicker = newReminderDialog.findViewById(R.id.timePicker);
         cancelBtn = newReminderDialog.findViewById(R.id.cancelBtn);
         doneBtn = newReminderDialog.findViewById(R.id.doneBtn);
-        doneBtn.setEnabled(false);
+        doneBtn.setEnabled(true);
 
 
         timePicker.setIs24HourView(true);
-        try {
-            mainText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (mainText.getText().toString().equals("")|| mainText.getText().toString().equals(" ")) {
-                        doneBtn.setEnabled(false);
-                    } else {
-                        doneBtn.setEnabled(true);
-                    }
-                }
-            });
-        }catch (NullPointerException e){
-            System.out.println(e);
-        }
-
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

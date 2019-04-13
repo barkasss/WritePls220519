@@ -1,21 +1,26 @@
 package com.brks.writepls;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Note {
 
     private String Name;
     private String Date;
-    private int favourite;
     private String Text;
+
+
+    private String key;
 
     public Note() {
 
     }
 
-    public Note(String name, String date, int favourite, String text) {
+    public Note(String name, String date, String text, String key) {
         Name = name;
         Date = date;
-        this.favourite = favourite;
         Text = text;
+        this.key = key;
     }
 
     //Getters
@@ -29,9 +34,6 @@ public class Note {
         return Date;
     }
 
-    public int getFavourite() {
-        return favourite;
-    }
 
     public String getText() {
         return Text;
@@ -48,11 +50,27 @@ public class Note {
         Date = date;
     }
 
-    public void setFavourite(int favourite) {
-        this.favourite = favourite;
-    }
-
     public void setText(String text) {
         Text = text;
     }
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name",Name);
+        result.put("text", Text);
+        result.put("date",Date);
+        result.put("key",key);
+
+        return result;
+    }
 }
+
+
+

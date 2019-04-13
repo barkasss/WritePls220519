@@ -3,8 +3,11 @@ package com.brks.writepls;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
     Context mContext;
     List<Note> mData;
-    Dialog mDialog;
+
     //NotesFragment notesFragment;
     int selected;
 
@@ -31,6 +34,9 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         //this.notesFragment = notesFragment;
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -41,54 +47,47 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
 
         //---------------------Инициализация диалогового окна и его вызов по кнопке----------------------------------------------------------
-        mDialog = new Dialog(mContext);
-        mDialog.setContentView(R.layout.dialog_delete_item);
-        Button yes_button = mDialog.findViewById(R.id.dialog_yes_btn);
-        Button no_button = mDialog.findViewById(R.id.dialog_no_btn);
+
+        viewHolder.item_note.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add(viewHolder.getAdapterPosition(),0,0,"Удалить");
+                menu.add(viewHolder.getAdapterPosition(),1,0,"Изменить");
+            }
+        });
+
 
         viewHolder.item_note.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+
                 Toast.makeText(mContext,"Test Click" + String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
-                mDialog.show();
+              //  mDialog.show();
                 selected = viewHolder.getAdapterPosition();
+
+
 
                 return false;
             }
         });
 
-        yes_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    deleteItem(selected);
-                    mDialog.cancel();
-                    notifyDataSetChanged();
-            }
-        });
-
-        no_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.cancel();
-            }
-        });
     //-------------------------------------------------------------------------------------------------------------------------------------
     // Редактор заметки?
 
-    viewHolder.item_note.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(mContext,NoteActivity.class);
-            intent.putExtra("Title",viewHolder.tv_Name.getText().toString());
-            intent.putExtra("Text",viewHolder.tv_Text.getText().toString());
-            intent.putExtra("selected", selected);
-            mContext.startActivity(intent);
+  //  viewHolder.item_note.setOnClickListener(new View.OnClickListener() {
+ //       @Override
+ //       public void onClick(View v) {
+ //           Intent intent = new Intent(mContext,NoteActivity.class);
+ //           intent.putExtra("Title",viewHolder.tv_Name.getText().toString());
+ //           intent.putExtra("Text",viewHolder.tv_Text.getText().toString());
+ //           intent.putExtra("selected", selected);
+ //           mContext.startActivity(intent);
 
 
 
 
-        }
-    });
+  //      }
+  //  });
 
 
 
@@ -103,7 +102,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
         holder.tv_Name.setText(mData.get(position).getName());
         holder.tv_Date.setText(mData.get(position).getDate());
-        holder.button.setBackgroundResource(mData.get(position).getFavourite());
         holder.tv_Text.setText(mData.get(position).getText());
 
 
@@ -121,7 +119,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         private LinearLayout item_note;
         private TextView tv_Name;
         private TextView tv_Date;
-        private Button button;
         private TextView tv_Text;
         //
 
@@ -133,33 +130,9 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             item_note = itemView.findViewById(R.id.note_item);
             tv_Name = itemView.findViewById(R.id.name_note);
             tv_Date = itemView.findViewById(R.id.date_note);
-            button = itemView.findViewById(R.id.favorite_btn_note);
             tv_Text = itemView.findViewById(R.id.text_note);
         }
     }
-
-    //Добавление данных
-    public void addItem(int position, Note note){
-        mData.add(position, note);
-        //Мы можем вызвать
-        super.notifyItemInserted(position);
-    }
-
-    //Удаление данных
-    public void deleteItem(int position){
-        mData.remove(position);
-
-        //То же самое с методом
-        super.notifyItemRemoved(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mData.size());
-        //  notesFragment.decreasePosition();
-        NotesFragment.decreasePosition();
-
-
-    }
-
-
 
 
 }

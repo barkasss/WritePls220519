@@ -1,5 +1,8 @@
 package com.brks.writepls;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,12 +10,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.text.DateFormat.getDateInstance;
 
@@ -23,10 +39,21 @@ public class NotesFragment extends Fragment {
 
     private RecyclerView notesRecyclerView;
     private List<Note> lstNote = new ArrayList<>();
-    private static int position = 0; // индекс заметок в lstNote
+    //private static int position = 0; // индекс заметок в lstNote
     int namePosition = 1;            // номер новой заметки при ее создании
     NotesRecyclerViewAdapter recyclerAdapter;
 
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
+
+    Dialog mDialog;
+    String editedText;
+    String editedName;
+
+    EditText textNote;
+    EditText titleNote;
+    Button saveBtn;
 
 
 
@@ -34,23 +61,24 @@ public class NotesFragment extends Fragment {
     public NotesFragment() {
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_notes, container, false);
 
-        recyclerAdapter = new NotesRecyclerViewAdapter(getContext(),lstNote);
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("notes");
+
         notesRecyclerView = v.findViewById(R.id.notes_recyclerView);
         notesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerAdapter = new NotesRecyclerViewAdapter(getContext(),lstNote);
         notesRecyclerView.setAdapter(recyclerAdapter);
 
 
-        //Создание первой заметки при входе
-        recyclerAdapter.addItem(position,new Note("Первая заметка",
-                getDateInstance().format(System.currentTimeMillis()),
-                R.drawable.btn_favourite_off, "Текст заметки" ));
-        position++;
 
 
         addBtn = v.findViewById(R.id.addBtn);
@@ -58,24 +86,151 @@ public class NotesFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Создание новой заметки
-                recyclerAdapter.addItem(position,new Note("Новая заметка " + namePosition,
-                        getDateInstance().format(System.currentTimeMillis()),
-                        R.drawable.btn_favourite_off, "Текст заметки" ));
-                //Обновление адаптера
-                recyclerAdapter.notifyItemInserted(position);
-                //Обновление позиции
-                position++;
-                //Обновление переменной нумерации новых записок
-                namePosition++;
+                addNote();
                 System.out.println(123);
             }
         });
 
+
+
+        updateList();
         return v;
     }
 
-    public static void decreasePosition() {
-        position--;
+    private void updateList(){
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                lstNote.add(dataSnapshot.getValue(Note.class));
+                recyclerAdapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Note note = dataSnapshot.getValue(Note.class);
+
+                int index = getItemIndex(note);
+                lstNote.set(index,note);
+
+                recyclerAdapter.notifyItemChanged(index);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                Note note = dataSnapshot.getValue(Note.class);
+
+                int index = getItemIndex(note);
+                lstNote.remove(index);
+
+                recyclerAdapter.notifyItemRemoved(index);
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+
+        switch (item.getItemId()){
+            case 0:
+                removeNote(item.getGroupId());
+                break;
+            case 1:
+
+                int position = item.getGroupId();
+
+                mDialog = new Dialog(getContext());
+                mDialog.setContentView(R.layout.dialog_edit_note);
+                saveBtn = mDialog.findViewById(R.id.save_btn);
+                textNote = mDialog.findViewById(R.id.main_text_note);
+                titleNote = mDialog.findViewById(R.id.title_note);
+
+                titleNote.setText(lstNote.get(position).getName());
+                textNote.setText(lstNote.get(position).getText());
+
+
+                mDialog.show();
+                saveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editedName = titleNote.getText().toString();
+                        editedText = textNote.getText().toString();
+                        mDialog.cancel();
+                        changeNote(item.getGroupId());
+                    }
+                });
+
+
+
+                break;
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+
+    private int getItemIndex(Note note){
+
+        int index = -1;
+        for(int i = 0; i < lstNote.size(); i++){
+            if(lstNote.get(i).getKey().equals(note.getKey())) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
+    private void removeNote(int position){
+        myRef.child(lstNote.get(position).getKey()).removeValue();
+   }
+
+    private void addNote(){
+        String id = myRef.push().getKey();
+        Note newNote = new Note("Новая заметка " + namePosition,
+        getDateInstance().format(System.currentTimeMillis()),"Текст заметки",id );
+
+        Map<String,Object> noteValue = newNote.toMap();
+
+        Map<String,Object> note = new HashMap<>();
+        note.put(id,noteValue);
+
+        myRef.updateChildren(note);
+        namePosition++;
+    }
+
+    private void changeNote(int position){
+
+
+
+        Note note = lstNote.get(position);
+
+        note.setText(editedText);
+        note.setName(editedName);
+
+        Map<String,Object> noteValue = note.toMap();
+
+        Map<String,Object> newNote = new HashMap<>();
+
+        newNote.put(note.getKey(),noteValue);
+
+        myRef.updateChildren(newNote);
+
+    }
+
+
 }

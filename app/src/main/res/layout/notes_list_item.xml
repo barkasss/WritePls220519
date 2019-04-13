@@ -5,12 +5,7 @@
     android:padding="16dp"
     android:orientation="horizontal"
     android:id="@+id/note_item">
-   
-   <Button
-       android:layout_width="45dp"
-       android:layout_height="45dp"
-       android:background="@drawable/btn_favourite_off"
-       android:id="@+id/favorite_btn_note"/>
+
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

@@ -25,12 +25,12 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        saveBtn = findViewById(R.id.save_btn);
+        saveBtn = findViewById(R.id.save_bt1n);
        // saveBtn.setCompoundDrawablesWithIntrinsicBounds(
         //        AppCompatResources.getDrawable(this, R.drawable.save), null, null, null); --иконочка
 
-        titleNote = findViewById(R.id.title_note);
-        textNote = findViewById(R.id.main_text_note);
+        titleNote = findViewById(R.id.title_n1ote);
+        textNote = findViewById(R.id.main_text_n1ote);
 
 
         Intent intent = getIntent();
@@ -39,8 +39,8 @@ public class NoteActivity extends AppCompatActivity {
         intent.getIntExtra("selected",selected);
 
 
-        titleNote.setText(NoteTitle);
-        textNote.setText(NoteText);
+     //   titleNote.setText(NoteTitle);
+    //    textNote.setText(NoteText);
 
 
 
@@ -48,12 +48,15 @@ public class NoteActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-              //  startActivity(intent);  -- создание новой мейн активности
+             //  Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+             //   startActivity(intent);  -- создание новой мейн активности
 
-            EditedNoteTitle = titleNote.getText().toString();
-            EditedNoteText = textNote.getText().toString();
-
+         //   EditedNoteTitle = titleNote.getText().toString();
+          //  EditedNoteText = textNote.getText().toString();
+          //  Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+         //   intent.putExtra("Name",EditedNoteTitle);
+          //  intent.putExtra("Text",EditedNoteText);
+          //  intent.putExtra("selected",selected);
 
                 finish();
             }
