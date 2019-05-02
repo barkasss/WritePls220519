@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ToDoListFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.3"
+        android:id="@+id/textList"
+        android:text=" "
+        android:textSize="14sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_weight="2.5"
+
+        >
+        
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Добавить дело"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:id="@+id/addToDo"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Очистить список"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:id="@+id/clearBtn"/>
+        
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:id="@+id/todo_recyclerView">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

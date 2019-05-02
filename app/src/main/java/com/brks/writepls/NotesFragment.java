@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,18 +34,17 @@ import java.util.Map;
 import static java.text.DateFormat.getDateInstance;
 
 public class NotesFragment extends Fragment {
-    Button addBtn;
 
-
+    FloatingActionButton addBtn;
 
     private RecyclerView notesRecyclerView;
     private List<Note> lstNote = new ArrayList<>();
-    //private static int position = 0; // индекс заметок в lstNote
     int namePosition = 1;            // номер новой заметки при ее создании
     NotesRecyclerViewAdapter recyclerAdapter;
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private DatabaseReference positionRef;
 
 
     Dialog mDialog;
@@ -56,11 +56,8 @@ public class NotesFragment extends Fragment {
     Button saveBtn;
 
 
-
-
     public NotesFragment() {
     }
-
 
 
     @Nullable
@@ -72,13 +69,15 @@ public class NotesFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("notes");
+        positionRef = database.getReference("namePosition");
+
+        readPositionFromDatabase();
+
 
         notesRecyclerView = v.findViewById(R.id.notes_recyclerView);
         notesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerAdapter = new NotesRecyclerViewAdapter(getContext(),lstNote);
         notesRecyclerView.setAdapter(recyclerAdapter);
-
-
 
 
         addBtn = v.findViewById(R.id.addBtn);
@@ -88,12 +87,13 @@ public class NotesFragment extends Fragment {
             public void onClick(View v) {
                 addNote();
                 System.out.println(123);
+
+
             }
         });
 
-
-
         updateList();
+
         return v;
     }
 
@@ -103,36 +103,27 @@ public class NotesFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 lstNote.add(dataSnapshot.getValue(Note.class));
                 recyclerAdapter.notifyDataSetChanged();
-
-
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Note note = dataSnapshot.getValue(Note.class);
-
                 int index = getItemIndex(note);
                 lstNote.set(index,note);
-
                 recyclerAdapter.notifyItemChanged(index);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
                 Note note = dataSnapshot.getValue(Note.class);
-
                 int index = getItemIndex(note);
                 lstNote.remove(index);
-
                 recyclerAdapter.notifyItemRemoved(index);
             }
-
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -172,8 +163,6 @@ public class NotesFragment extends Fragment {
                     }
                 });
 
-
-
                 break;
 
         }
@@ -197,12 +186,14 @@ public class NotesFragment extends Fragment {
 
     private void removeNote(int position){
         myRef.child(lstNote.get(position).getKey()).removeValue();
+
    }
 
     private void addNote(){
         String id = myRef.push().getKey();
         Note newNote = new Note("Новая заметка " + namePosition,
         getDateInstance().format(System.currentTimeMillis()),"Текст заметки",id );
+
 
         Map<String,Object> noteValue = newNote.toMap();
 
@@ -211,12 +202,10 @@ public class NotesFragment extends Fragment {
 
         myRef.updateChildren(note);
         namePosition++;
+        writePositionToDatabase();
     }
 
     private void changeNote(int position){
-
-
-
         Note note = lstNote.get(position);
 
         note.setText(editedText);
@@ -232,5 +221,25 @@ public class NotesFragment extends Fragment {
 
     }
 
+    private void writePositionToDatabase(){
+        positionRef.setValue(namePosition);
+    }
+
+    private void readPositionFromDatabase(){
+        // Read from the database
+        positionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                int value = dataSnapshot.getValue(Integer.class);
+                namePosition = value;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
 
 }

@@ -23,9 +23,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
     Context mContext;
     List<Note> mData;
 
-    //NotesFragment notesFragment;
-    int selected;
-
 
 
     public NotesRecyclerViewAdapter(Context mContext, List<Note> mData) {
@@ -56,44 +53,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             }
         });
 
-
-        viewHolder.item_note.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                Toast.makeText(mContext,"Test Click" + String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
-              //  mDialog.show();
-                selected = viewHolder.getAdapterPosition();
-
-
-
-                return false;
-            }
-        });
-
-    //-------------------------------------------------------------------------------------------------------------------------------------
-    // Редактор заметки?
-
-  //  viewHolder.item_note.setOnClickListener(new View.OnClickListener() {
- //       @Override
- //       public void onClick(View v) {
- //           Intent intent = new Intent(mContext,NoteActivity.class);
- //           intent.putExtra("Title",viewHolder.tv_Name.getText().toString());
- //           intent.putExtra("Text",viewHolder.tv_Text.getText().toString());
- //           intent.putExtra("selected", selected);
- //           mContext.startActivity(intent);
-
-
-
-
-  //      }
-  //  });
-
-
-
-
-
-
         return viewHolder;
     }
 
@@ -103,9 +62,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         holder.tv_Name.setText(mData.get(position).getName());
         holder.tv_Date.setText(mData.get(position).getDate());
         holder.tv_Text.setText(mData.get(position).getText());
-
-
-
 
     }
 
@@ -120,8 +76,6 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         private TextView tv_Name;
         private TextView tv_Date;
         private TextView tv_Text;
-        //
-
 
 
         public MyViewHolder(@NonNull View itemView) {

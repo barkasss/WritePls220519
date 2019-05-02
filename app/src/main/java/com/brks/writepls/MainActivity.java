@@ -7,20 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Switch;
-import android.widget.Toast;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sPref;
     public boolean a ;
     public static final String SWITCH_NOTIFICATIONS = "switch_pop_up";
-    final   NotesFragment notesFragment = new NotesFragment();
-    final   RemindersFragment remindersFragment = new RemindersFragment();
-    final   SettingsFragment settingsFragment = new SettingsFragment();
+    final NotesFragment notesFragment = new NotesFragment();
+    final RemindersFragment remindersFragment = new RemindersFragment();
+    final SettingsFragment settingsFragment = new SettingsFragment();
+    final ToDoListFragment toDoListFragment = new ToDoListFragment();
+    final ShoppingListFragment shoppingListFragment = new ShoppingListFragment();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -30,46 +27,50 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotesFragment()).commit();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-
-
-
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment selectedFragment = null;
+                Fragment selectedFragment = notesFragment;
 
 
                 switch (menuItem.getItemId()) {
                     case R.id.action_notes:
-                        loadSettNotif();
-                        if(a)
-                            Toast.makeText(MainActivity.this, "Your Notes", Toast.LENGTH_SHORT).show();
+                   //     loadSettNotif();
+                     //   if(a)
+                   //         Toast.makeText(MainActivity.this, "Your Notes", Toast.LENGTH_SHORT).show();
                         selectedFragment = notesFragment;
                         break;
                     case R.id.action_reminders:
-                        loadSettNotif();
-                        if(a)
-                            Toast.makeText(MainActivity.this, "Your Reminders", Toast.LENGTH_SHORT).show();
+                   //     loadSettNotif();
+                    //    if(a)
+                      //      Toast.makeText(MainActivity.this, "Your Reminders", Toast.LENGTH_SHORT).show();
                         selectedFragment = remindersFragment;
                         break;
-                    case R.id.action_settings:
-                        loadSettNotif();
-                        if(a)
-                            Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-                        selectedFragment = settingsFragment;
-                        a = settingsFragment.getSPUisChecked();
-                        saveSettNotif();
+                  //  case R.id.action_settings:
+                    //    loadSettNotif();
+                    //    if(a)
+                     //       Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                     //   selectedFragment = settingsFragment;
+                      //  a = settingsFragment.getSPUisChecked();
+                      //  saveSettNotif();
+                   //     break;
+                    case R.id.action_to_do_list :
+                      //  loadSettNotif();
+                       // if(a)
+                        //    Toast.makeText(MainActivity.this, "Your To Do Lists", Toast.LENGTH_SHORT).show();
+                        selectedFragment = toDoListFragment;
                         break;
+                    case R.id.action_to_buy_list:
+                        selectedFragment = shoppingListFragment;
+                        break;
+
                 }
 
                 assert selectedFragment != null;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         selectedFragment).commit();
-                a = settingsFragment.getSPUisChecked();
-                saveSettNotif();
+             //   a = settingsFragment.getSPUisChecked();
+              //  saveSettNotif();
 
 
 

@@ -2,7 +2,11 @@
     <string name="app_name">WritePls</string>
     <string name="notes">Notes</string>
     <string name="reminders">Reminders</string>
+    <string name="toDoList">To do list</string>
     <string name="settings">Settings</string>
     <string name="pop_up">Enabled pop-up notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

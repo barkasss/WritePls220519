@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-<item
-    android:id="@+id/action_settings"
-    android:enabled="true"
-    android:icon="@drawable/ic_settings"
-    android:title="@string/settings"
-    app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_notes"
         android:enabled="true"
@@ -19,6 +13,18 @@
         android:enabled="true"
         android:icon="@drawable/ic_reminders"
         android:title="@string/reminders"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_to_do_list"
+        android:enabled="true"
+        android:icon="@drawable/ic_list"
+        android:title="@string/toDoList"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_to_buy_list"
+        android:enabled="true"
+        android:icon="@drawable/ic__buy_list"
+        android:title="Shopping List"
         app:showAsAction="ifRoom"/>
 
 </menu>

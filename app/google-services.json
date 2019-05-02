@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "364625624849",
+    "firebase_url": "https://writepls-7aa4d.firebaseio.com",
+    "project_id": "writepls-7aa4d",
+    "storage_bucket": "writepls-7aa4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364625624849:android:08816946f7a8ca7b",
+        "android_client_info": {
+          "package_name": "com.brks.writepls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364625624849-1mi5aoihtiurln2vj7929moier6oai5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brks.writepls",
+            "certificate_hash": "850652f3b7d9c712589cb5dd20aee7ca75e457b0"
+          }
+        },
+        {
+          "client_id": "364625624849-stscl3ucg05ojqr8sj5dddvthfe88223.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ6AmORKbys4VdzZPTpzXZY7rpHUpJyXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364625624849-stscl3ucg05ojqr8sj5dddvthfe88223.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
