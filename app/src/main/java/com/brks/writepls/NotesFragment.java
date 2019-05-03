@@ -92,6 +92,8 @@ public class NotesFragment extends Fragment {
             }
         });
 
+
+        lstNote.clear();
         updateList();
 
         return v;

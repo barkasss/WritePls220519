@@ -40,11 +40,10 @@ public class ShoppingRecyclerViewAdapter extends RecyclerView.Adapter<ShoppingRe
     @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup,  int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v;
         v = LayoutInflater.from(mContext).inflate(R.layout.shopping_list_item,viewGroup,false);
         final MyViewHolder viewHolder = new MyViewHolder(v,mListener);
-
 
         viewHolder.item_shopping_element.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
@@ -53,47 +52,37 @@ public class ShoppingRecyclerViewAdapter extends RecyclerView.Adapter<ShoppingRe
             }
         });
 
-        viewHolder.statusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = viewHolder.getAdapterPosition();
-
-                if(mData.get(position).isStatus() == 1){
-                    viewHolder.statusBtn.setBackgroundResource(R.drawable.btn_rounded_grey);
-                    viewHolder.statusBtn.setText("Готово");
-                    viewHolder.toBuyText.setTextColor(Color.GRAY);
-
-                }else {
-                    viewHolder.statusBtn.setBackgroundResource(R.drawable.btn_rounded_light);
-                    viewHolder.statusBtn.setText("Купить");
-                    viewHolder.toBuyText.setTextColor(Color.BLACK);
-
-                }
-                mListener.onStatusClick(position);
-
-            }
-        });
-
-
         return viewHolder;
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         holder.toBuyText.setText(mData.get(position).getToBuy());
 
-    }
+        if(!mData.get(position).isStatus() ){
+            holder.statusBtn.setBackgroundResource(R.drawable.btn_rounded_grey);
+            holder.statusBtn.setText("Готово");
+            holder.toBuyText.setTextColor(Color.GRAY);
 
+        }
+        else {
+            holder.statusBtn.setBackgroundResource(R.drawable.btn_rounded_light);
+            holder.statusBtn.setText("Купить");
+            holder.toBuyText.setTextColor(Color.BLACK);
+
+        }
+
+    }
 
     @Override
     public int getItemCount() { return mData.size(); }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView toBuyText;
-        private Button statusBtn;
-        private LinearLayout item_shopping_element;
+        public TextView toBuyText;
+        public Button statusBtn;
+        public LinearLayout item_shopping_element;
 
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -103,6 +92,12 @@ public class ShoppingRecyclerViewAdapter extends RecyclerView.Adapter<ShoppingRe
             item_shopping_element = itemView.findViewById(R.id.shopping_item);
             toBuyText.setTextColor(Color.BLACK);
 
+            statusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onStatusClick(getAdapterPosition());
+                }
+            });
 
         }
     }

@@ -99,6 +99,8 @@ public class ToDoListFragment extends Fragment  {
             }
         });
         readListFromDatabase();
+
+        lstToDo.clear();
         updateList();
         return v;
     }

@@ -20,8 +20,16 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
 
     Context mContext;
     List<Reminder> mData;
-    Dialog mDialog;
-    int selected;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onStatusClick(int position);
+
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        mListener = onItemClickListener;
+    }
 
     public ReminderRecyclerViewAdapter(Context mContext, List<Reminder> mData) {
         this.mContext = mContext;
@@ -34,45 +42,7 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
 
         View v;
         v = LayoutInflater.from(mContext).inflate(R.layout.reminders_list_item,viewGroup,false);
-        final MyViewHolder viewHolder = new MyViewHolder(v);
-
-        //---------------------Инициализация диалогового окна и его вызов по кнопке----------------------------------------------------------
-        mDialog = new Dialog(mContext);
-        mDialog.setContentView(R.layout.dialog_delete_item);
-        Button yes_button = mDialog.findViewById(R.id.dialog_yes_btn);
-        Button no_button = mDialog.findViewById(R.id.dialog_no_btn);
-
-        viewHolder.item_reminder.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(mContext,"Test Click" + String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
-                mDialog.show();
-                selected = viewHolder.getAdapterPosition();
-
-                return false;
-            }
-        });
-
-        yes_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    deleteItem(selected);
-                    mDialog.cancel();
-                    notifyDataSetChanged();
-                }catch (ArrayIndexOutOfBoundsException e){
-                    Log.e("Error","\n ArrayIndexOutOfBoundsException length=10 index=-1 \n Опять -1, но как ???");
-                }
-            }
-        });
-
-        no_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.cancel();
-            }
-        });
-        //-------------------------------------------------------------------------------------------------------------------------------------
+        final MyViewHolder viewHolder = new MyViewHolder(v,mListener);
 
         return viewHolder;
     }
@@ -80,7 +50,7 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.time.setText(mData.get(position).getTime());
+        holder.time.setText(mData.get(position).getHour() + ":" + mData.get(position).getMinute());
         holder.aSwitch.setChecked(mData.get(position).isFlag());
         holder.text.setText(mData.get(position).getText());
     }
@@ -97,34 +67,21 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
         private TextView text;
         private LinearLayout item_reminder;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
             item_reminder = itemView.findViewById(R.id.note_item);
             time = itemView.findViewById(R.id.time_reminder);
             aSwitch = itemView.findViewById(R.id.switch_reminder);
             text = itemView.findViewById(R.id.text_reminder);
+
+            aSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onStatusClick(getAdapterPosition());
+                }
+            });
         }
     }
-
-    public void addItem(int position, Reminder reminder){
-        mData.add(position, reminder);
-        //Мы можем вызвать
-        super.notifyItemInserted(position);
-    }
-
-    //Удаление данных
-    public void deleteItem(int position){
-        mData.remove(position);
-
-        //То же самое с методом
-        super.notifyItemRemoved(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, mData.size());
-        RemindersFragment.decreasePosition();
-
-
-    }
-
 
 }

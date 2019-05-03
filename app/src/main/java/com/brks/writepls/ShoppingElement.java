@@ -4,24 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ShoppingElement {
-    private int status;
+    private boolean status;
     private String toBuy;
     private String key;
 
     public ShoppingElement() {
     }
 
-    public ShoppingElement(int status, String toBuy, String key) {
+    public ShoppingElement(boolean status, String toBuy, String key) {
         this.status = status;
         this.toBuy = toBuy;
         this.key = key;
     }
 
-    public int isStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

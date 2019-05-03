@@ -1,6 +1,5 @@
 package com.brks.writepls;
 
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +28,6 @@ import java.util.Map;
 
 public class ShoppingListFragment extends Fragment {
 
-
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
@@ -41,15 +39,14 @@ public class ShoppingListFragment extends Fragment {
     EditText editText;
     Button clearList;
 
-
     public ShoppingListFragment() {
-        // Required empty public constructor
+// Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+// Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
         database = FirebaseDatabase.getInstance();
@@ -67,21 +64,21 @@ public class ShoppingListFragment extends Fragment {
         shoppingRecyclerViewAdapter.setOnItemClickListener(new ShoppingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onStatusClick(int position) {
-                if(lstToBuy.get(position).isStatus() == 1){
-                    lstToBuy.get(position).setStatus(0);
-                    changeShoppElement(position,0);
+                if(lstToBuy.get(position).isStatus()){
+
+                    changeShoppElement(position,false);
+                    lstToBuy.get(position).setStatus(false);
 
                 }else {
-                    lstToBuy.get(position).setStatus(1);
-                    changeShoppElement(position,1);
+                    changeShoppElement(position,true);
+                    lstToBuy.get(position).setStatus(true);
 
                 }
-              //  updateList();
-                System.out.print("ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО ДОШЛО");
+// updateList();
                 shoppingRecyclerViewAdapter.notifyDataSetChanged();
                 sortList();
 
-               // updateList();
+// updateList();
             }
         });
 
@@ -98,7 +95,7 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-
+        lstToBuy.clear();
         updateList();
 
         return v;
@@ -109,7 +106,7 @@ public class ShoppingListFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 lstToBuy.add(dataSnapshot.getValue(ShoppingElement.class));
-               shoppingRecyclerViewAdapter.notifyDataSetChanged();
+                shoppingRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -144,7 +141,9 @@ public class ShoppingListFragment extends Fragment {
     }
     private int getItemIndex(ShoppingElement shoppingElement){
 
-        int index = -1;
+        int index
+
+                = -1;
         for(int i = 0; i < lstToBuy.size(); i++){
             if(lstToBuy.get(i).getKey().equals(shoppingElement.getKey())) {
                 index = i;
@@ -171,7 +170,7 @@ public class ShoppingListFragment extends Fragment {
         if(!editText.getText().toString().equals("")) {
             String id = myRef.push().getKey();
 
-            ShoppingElement newShoppingElement = new ShoppingElement(1, editText.getText().toString(), id);
+            ShoppingElement newShoppingElement = new ShoppingElement(true, editText.getText().toString(), id);
 
             Map<String, Object> shopValue = newShoppingElement.toMap();
 
@@ -184,17 +183,20 @@ public class ShoppingListFragment extends Fragment {
         }
     }
     private void clearList(){
-        for(int i = lstToBuy.size() - 1; i > -1; i-- )removeShoppingElement(i);
+        for(int i = lstToBuy.size() - 1; i > -1; i--)removeShoppingElement(i);
+
 
     }
     private void removeShoppingElement(int position){
+        shoppingRecyclerViewAdapter.mData.get(position).setStatus(true);
+        lstToBuy.get(position).setStatus(true);
         myRef.child(lstToBuy.get(position).getKey()).removeValue();
     }
 
     public static void sortList(){
         Collections.sort(lstToBuy,new CompareSh());
     }
-    private void changeShoppElement(int position,int status){
+    private void changeShoppElement(int position,boolean status){
         ShoppingElement shoppingElement = lstToBuy.get(position);
 
         shoppingElement.setStatus(status);
