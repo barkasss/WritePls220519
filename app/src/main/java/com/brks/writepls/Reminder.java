@@ -9,7 +9,7 @@ public class Reminder {
         this.minute = minute;
         this.flag = flag;
         Text = text;
-        this.key = key;
+        this.key = Key;
     }
 
     public Reminder(){
@@ -19,10 +19,7 @@ public class Reminder {
     private int minute;
     private boolean flag;
     private String Text;
-
     private String key;
-
-//Getters
 
     public int getHour() {
         return hour;
@@ -36,8 +33,6 @@ public class Reminder {
         return Text;
     }
 
-//Setters
-
     public void setHour(int time) {
         hour = time;
     }
@@ -48,17 +43,6 @@ public class Reminder {
 
     public void setText(String text) {
         Text = text;
-    }
-
-    public Map<String, Object> toMap(){
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("flag", flag);
-        result.put("hour",hour);
-        result.put("minute",minute);
-        result.put("Text",Text);
-        result.put("key",key);
-
-        return result;
     }
 
     public String getKey() {
@@ -75,5 +59,17 @@ public class Reminder {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("flag", flag);
+        result.put("hour",hour);
+        result.put("minute",minute);
+        result.put("Text",Text);
+        result.put("key",key);
+
+        return result;
     }
 }

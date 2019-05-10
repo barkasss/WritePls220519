@@ -1,25 +1,30 @@
 package com.brks.writepls;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.AlarmClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,11 +55,20 @@ public class RemindersFragment extends Fragment {
     EditText mainText;
     TimePicker timePicker;
 
+
+
     private RecyclerView reminderRecyclerView;
     private List<Reminder> lstReminder = new ArrayList<>();
     ReminderRecyclerViewAdapter recyclerAdapter;
 
+    private AlarmManager alarmManager;
+
     public int namePosition;
+
+    PendingIntent pendingIntent;
+
+    Calendar calendar;
+    //a
 //
 
     @Nullable
@@ -65,8 +81,12 @@ public class RemindersFragment extends Fragment {
         remRef = database.getReference("remList");
 
         readPositionFromDatabase();
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        recyclerAdapter = new ReminderRecyclerViewAdapter(getContext(),lstReminder);
+         calendar= Calendar.getInstance();
+
+
+        recyclerAdapter = new ReminderRecyclerViewAdapter(getContext(), lstReminder);
         reminderRecyclerView = v.findViewById(R.id.reminders_recyclerView);
         reminderRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         reminderRecyclerView.setAdapter(recyclerAdapter);
@@ -79,19 +99,23 @@ public class RemindersFragment extends Fragment {
         doneBtn = newReminderDialog.findViewById(R.id.doneBtn);
 
 
+
+
         recyclerAdapter.setOnItemClickListener(new ReminderRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onStatusClick(int position) {
-                if(lstReminder.get(position).isFlag()){
+                boolean flag;
+                if (lstReminder.get(position).isFlag()) {
 
-                    changeReminder(position,false);
+                    flag = false;
                     lstReminder.get(position).setFlag(false);
 
-                }else {
-                    changeReminder(position,true);
+                } else {
+                    flag = true;
                     lstReminder.get(position).setFlag(true);
 
                 }
+                changeReminder(position, flag);
             }
         });
 
@@ -106,9 +130,14 @@ public class RemindersFragment extends Fragment {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                if(!mainText.getText().toString().equals("")){
-                    addNote();
+                if (!mainText.getText().toString().equals("")) {
+                    addReminder();
+
+                    AlarmReceiver.textNot(mainText.getText().toString());
+                    createNotification(timePicker.getHour(),timePicker.getMinute());
+
                     newReminderDialog.cancel();
+                    mainText.setText("");
                 }
 
             }
@@ -128,7 +157,7 @@ public class RemindersFragment extends Fragment {
         return v;
     }
 
-    private void updateList(){
+    private void updateList() {
         remRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -165,11 +194,12 @@ public class RemindersFragment extends Fragment {
             }
         });
     }
-    private int getItemIndex(Reminder reminder){
+
+    private int getItemIndex(Reminder reminder) {
 
         int index = -1;
-        for(int i = 0; i < lstReminder.size(); i++){
-            if(lstReminder.get(i).getKey().equals(reminder.getKey())) {
+        for (int i = 0; i < lstReminder.size(); i++) {
+            if (lstReminder.get(i).getKey().equals(reminder.getKey())) {
                 index = i;
                 break;
             }
@@ -177,26 +207,28 @@ public class RemindersFragment extends Fragment {
 
         return index;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void addNote(){
+    private void addReminder() {
         String id = remRef.push().getKey();
-        Reminder newReminder = new Reminder(timePicker.getHour(),timePicker.getMinute(),true,mainText.getText().toString(),id );
+        Reminder newReminder = new Reminder(timePicker.getHour(), timePicker.getMinute(), true, mainText.getText().toString(), id);
 
 
-        Map<String,Object> noteValue = newReminder.toMap();
+        Map<String, Object> noteValue = newReminder.toMap();
 
-        Map<String,Object> reminder = new HashMap<>();
-        reminder.put(id,noteValue);
+        Map<String, Object> reminder = new HashMap<>();
+        reminder.put(id, noteValue);
 
         remRef.updateChildren(reminder);
-       // namePosition++;
+        // namePosition++;
         writePositionToDatabase();
     }
-    private void writePositionToDatabase(){
+
+    private void writePositionToDatabase() {
         posRef.setValue(namePosition);
     }
 
-    private void readPositionFromDatabase(){
+    private void readPositionFromDatabase() {
         // Read from the database
         posRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -213,19 +245,34 @@ public class RemindersFragment extends Fragment {
         });
     }
 
-    private void changeReminder(int position,boolean status){
+    private void changeReminder(int position, boolean status) {
         Reminder reminder = lstReminder.get(position);
 
         reminder.setFlag(status);
 
-        Map<String,Object> remValue = reminder.toMap();
+        Map<String, Object> remValue = reminder.toMap();
 
-        Map<String,Object> newReminder = new HashMap<>();
+        Map<String, Object> newReminder = new HashMap<>();
 
-        newReminder.put(reminder.getKey(),remValue);
+        newReminder.put(reminder.getKey(), remValue);
 
         remRef.updateChildren(newReminder);
 
     }
 
+    public void createNotification(int hour,int minute) {
+
+        calendar.set(Calendar.HOUR_OF_DAY,hour);
+        calendar.set(Calendar.MINUTE,minute);
+
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+
+        pendingIntent = PendingIntent.getBroadcast(getActivity(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
+
+    }
 }

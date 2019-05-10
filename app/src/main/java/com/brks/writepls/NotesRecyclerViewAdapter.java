@@ -53,6 +53,8 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
             }
         });
 
+
+
         return viewHolder;
     }
 

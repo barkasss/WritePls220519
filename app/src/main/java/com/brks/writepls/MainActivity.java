@@ -1,5 +1,6 @@
 package com.brks.writepls;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        Bundle bundle = new Bundle();
+
     }
 
         //OnCreate end
@@ -91,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
         a = sPref.getBoolean(SWITCH_NOTIFICATIONS, true);
     }
+
+
 
 
 }
