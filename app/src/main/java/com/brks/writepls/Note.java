@@ -9,6 +9,16 @@ public class Note {
     private String Date;
     private String Text;
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    private boolean visible;
+
 
     private String key;
 
@@ -16,11 +26,12 @@ public class Note {
 
     }
 
-    public Note(String name, String date, String text, String key) {
+    public Note(String name, String date, String text, String key,boolean visible) {
         Name = name;
         Date = date;
         Text = text;
         this.key = key;
+        this.visible = visible;
     }
 
     //Getters
@@ -67,6 +78,7 @@ public class Note {
         result.put("text", Text);
         result.put("date",Date);
         result.put("key",key);
+        result.put("visible",visible);
 
         return result;
     }

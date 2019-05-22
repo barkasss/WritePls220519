@@ -24,7 +24,7 @@
         android:id="@+id/action_to_buy_list"
         android:enabled="true"
         android:icon="@drawable/ic__buy_list"
-        android:title="Shopping List"
+        android:title="@string/shoppingList"
         app:showAsAction="ifRoom"/>
 
 </menu>

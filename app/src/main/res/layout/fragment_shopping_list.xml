@@ -37,6 +37,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/ic_add_light"
                 android:gravity="center"
+                
                 />
         </RelativeLayout>
 

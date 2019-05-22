@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +45,22 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
         v = LayoutInflater.from(mContext).inflate(R.layout.reminders_list_item,viewGroup,false);
         final MyViewHolder viewHolder = new MyViewHolder(v,mListener);
 
+        viewHolder.item_reminder.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                menu.add(viewHolder.getAdapterPosition(),0,0,"Удалить");
+              //  menu.add(viewHolder.getAdapterPosition(),1,0,"Изменить");
+            }
+        });
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
-        holder.time.setText(mData.get(position).getHour() + ":" + mData.get(position).getMinute());
+        if( mData.get(position).getMinute() > 10) {
+            holder.time.setText(mData.get(position).getHour() + ":" + mData.get(position).getMinute());
+        }else holder.time.setText(mData.get(position).getHour() + ":0" + mData.get(position).getMinute());
         holder.aSwitch.setChecked(mData.get(position).isFlag());
         holder.text.setText(mData.get(position).getText());
     }
@@ -70,7 +80,7 @@ public class ReminderRecyclerViewAdapter extends RecyclerView.Adapter<ReminderRe
         public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
 
-            item_reminder = itemView.findViewById(R.id.note_item);
+            item_reminder = itemView.findViewById(R.id.reminder_item);
             time = itemView.findViewById(R.id.time_reminder);
             aSwitch = itemView.findViewById(R.id.switch_reminder);
             text = itemView.findViewById(R.id.text_reminder);

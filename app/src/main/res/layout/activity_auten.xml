@@ -1,64 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     tools:context=".AutActivity"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:layout_marginTop="50dp">
+
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/lock"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+       />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="                    Привет \n Авторизуйтесь пожалуйста :)"
         android:layout_gravity="center"
-        android:layout_marginTop="65dp"
-        android:textSize="25sp"/>
+        android:layout_marginTop="25dp"
+        android:text="Авторизация"
+        android:textColor="@color/black"
+        android:textSize="40sp" />
 
     <EditText
-        android:layout_width="250dp"
-        android:layout_height="50dp"
         android:id="@+id/et_email"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="95dp"
-        android:hint="Email"
-        android:textSize="25dp"
-        android:layout_gravity="center" />
-    <EditText android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/et_email"
-        android:hint="Password"
-        android:textSize="25dp"
-        android:layout_gravity="center"
-        android:id="@+id/et_password"
-        />
-
-    <LinearLayout android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        >
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="50dp"
+        android:hint="Email"
+        android:padding="10sp"
+        android:inputType="textEmailAddress"
+        android:textSize="25dp"
+        android:background="@drawable/fields"/>
+
+
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/et_email"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:hint="Пароль"
+        android:padding="10sp"
+        android:inputType="textPassword"
+        android:textSize="25dp"
+        android:background="@drawable/fields"/>
+
+
 
         <Button
             android:id="@+id/btn_sign_in"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="80dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="Авторизация" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10sp"
+            android:background="@drawable/shapesignup"
+            android:text="Войти"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"/>
+
 
         <Button
             android:id="@+id/btn_registration"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:padding="10sp"
+            android:background="@drawable/shapelogin"
+            android:textColor="@color/black"
+            android:text="Регистрация"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"/>
 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="32dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="Регистрация" />
-
-    </LinearLayout>
 
 </LinearLayout>

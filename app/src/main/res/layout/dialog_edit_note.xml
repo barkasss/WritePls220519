@@ -14,7 +14,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Note title"
+            android:hint="Название заметки"
             android:layout_weight="5"
             android:id="@+id/title_note"
           />
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Your note text :)"
+            android:hint="Тут будет текст вашей заметки"
             android:gravity="top|left"
             android:id="@+id/main_text_note"
           />
@@ -40,5 +40,6 @@
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
+
 
 </FrameLayout>

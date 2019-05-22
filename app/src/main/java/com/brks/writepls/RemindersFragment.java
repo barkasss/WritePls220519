@@ -19,6 +19,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -104,17 +105,7 @@ public class RemindersFragment extends Fragment {
         recyclerAdapter.setOnItemClickListener(new ReminderRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onStatusClick(int position) {
-                boolean flag;
-                if (lstReminder.get(position).isFlag()) {
-
-                    flag = false;
-                    lstReminder.get(position).setFlag(false);
-
-                } else {
-                    flag = true;
-                    lstReminder.get(position).setFlag(true);
-
-                }
+                boolean flag = !lstReminder.get(position).isFlag();
                 changeReminder(position, flag);
             }
         });
@@ -134,6 +125,8 @@ public class RemindersFragment extends Fragment {
                     addReminder();
 
                     AlarmReceiver.textNot(mainText.getText().toString());
+
+
                     createNotification(timePicker.getHour(),timePicker.getMinute());
 
                     newReminderDialog.cancel();
@@ -195,6 +188,18 @@ public class RemindersFragment extends Fragment {
         });
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case 0:
+                removeReminder(item.getGroupId());
+
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
     private int getItemIndex(Reminder reminder) {
 
         int index = -1;
@@ -222,6 +227,11 @@ public class RemindersFragment extends Fragment {
         remRef.updateChildren(reminder);
         // namePosition++;
         writePositionToDatabase();
+    }
+
+    private void removeReminder(int position){
+        remRef.child(lstReminder.get(position).getKey()).removeValue();
+
     }
 
     private void writePositionToDatabase() {

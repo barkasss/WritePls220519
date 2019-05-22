@@ -79,6 +79,22 @@ public class NotesFragment extends Fragment {
         recyclerAdapter = new NotesRecyclerViewAdapter(getContext(),lstNote);
         notesRecyclerView.setAdapter(recyclerAdapter);
 
+        recyclerAdapter.setOnItemClickListener(new NotesRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onStatusClick(int position) {
+                if(lstNote.get(position).isVisible()){
+
+                    changeNote(position,false);
+                    lstNote.get(position).setVisible(false);
+
+                }else {
+                    changeNote(position,true);
+                    lstNote.get(position).setVisible(true);
+
+                }
+            }
+        });
+
 
         addBtn = v.findViewById(R.id.addBtn);
 
@@ -194,7 +210,7 @@ public class NotesFragment extends Fragment {
     private void addNote(){
         String id = myRef.push().getKey();
         Note newNote = new Note("Новая заметка " + namePosition,
-        getDateInstance().format(System.currentTimeMillis()),"Текст заметки",id );
+        getDateInstance().format(System.currentTimeMillis()),"Текст заметки",id,true );
 
 
         Map<String,Object> noteValue = newNote.toMap();
@@ -212,6 +228,20 @@ public class NotesFragment extends Fragment {
 
         note.setText(editedText);
         note.setName(editedName);
+
+        Map<String,Object> noteValue = note.toMap();
+
+        Map<String,Object> newNote = new HashMap<>();
+
+        newNote.put(note.getKey(),noteValue);
+
+        myRef.updateChildren(newNote);
+
+    }
+    private void changeNote(int position,boolean visible){
+        Note note = lstNote.get(position);
+
+        note.setVisible(visible);
 
         Map<String,Object> noteValue = note.toMap();
 

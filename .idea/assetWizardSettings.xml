@@ -40,13 +40,24 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="000000" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                     </map>
                                   </option>
                                   <option name="values">
                                     <map>
                                       <entry key="outputName" value="ic_add_light" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="009688" />
+                                      <entry key="themeColor" value="6f79a8" />
                                     </map>
                                   </option>
                                 </PersistentState>

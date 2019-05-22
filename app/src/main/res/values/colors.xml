@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00695c</color>
-    <color name="colorAccent">#b2dfdb</color>
+
+    <color name="colorPrimaryGreen">#009688</color>
+    <color name="colorPrimaryDarkGreen">#00695c</color>
+    <color name="colorPrimaryLightGreen">#70CCBF</color>
+    <color name="colorAccentGreen">#b2dfdb</color>
+
+    <color name="colorPrimary">#9fa8da</color>
+    <color name="colorPrimaryDark">#6f79a8</color>
+    <color name="colorPrimaryLight">#d1d9ff</color>
+    <color name="colorAccent">#9E87BB</color>
+
+    <color name="colorPrimaryCyan">#80deea</color>
+    <color name="colorPrimaryDarkCyan">#4bacb8</color>
+    <color name="colorPrimaryLightCyan">#b4ffff</color>
+    <color name="colorAccentCyan">#B2DFDB</color>
+
+    <color name="colorPrimaryPink">#f8bbd0</color>
+    <color name="colorPrimaryDarkPink">#c48b9f</color>
+    <color name="colorPrimaryLightPink">#ffeeff</color>
+    <color name="colorAccentPink">#DFB2D5</color>
+
+    <color name="colorPrimaryGrey">#bdbdbd</color>
+    <color name="colorPrimaryDarkGrey">#8d8d8d</color>
+    <color name="colorPrimaryLightGrey">#efefef</color>
+    <color name="colorAccentGrey">#9C8D8D</color>
+
+
+
     <color name="whiteb">#E6D6D6D6</color>
-    <color name="colorPrimaryLight">#70CCBF</color>
     <color name="grey">#7E8885</color>
     <color name="black">#000000</color>
 
